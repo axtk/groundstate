@@ -17,7 +17,7 @@ npm i groundstate
 
 ## Usage
 
-Let's take two components containing counters stored in their local states via React's `useState()`, isolated from each other. Let's see what should be edited to share the counter between `PlusButton` and `Display`.
+Let's take two components containing counters stored in their local states via React's `useState()`, isolated from each other. Let's see what should be edited to share the counter between these components.
 
 ```diff
 import {createContext, useContext} from 'react';
