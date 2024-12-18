@@ -90,6 +90,8 @@ let UserCard = ({userId}) => {
 
 In this example, the `UserCard` component uses only the `users` store from `AppContext`. It won't be re-rendered if the contents of the `articles` store gets updated (just as intended).
 
+Note that a store is picked from the Context just like any other value on a Context. The Context may as well contain other non-store items alongside stores if need be. A store (whether from the Context or elsewhere) is passed to the `useStore()` hook to unpack the current store state and subscribe the component to the store updates.
+
 ## Other use cases
 
 ### Persistent local state
