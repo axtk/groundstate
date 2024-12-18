@@ -81,12 +81,14 @@ let AppContext = createContext({
     articles: new Store(/* ... */),
 });
 
-let UserInfo = ({userId}) => {
+let UserCard = ({userId}) => {
     let [users, setUsers] = useStore(useContext(AppContext).users);
 
     // ...
 };
 ```
+
+In this example, the `UserCard` component uses only the `users` store from `AppContext`. It won't be re-rendered if the contents of the `articles` store gets updated (just as intended).
 
 ## Other use cases
 
