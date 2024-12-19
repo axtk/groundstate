@@ -50,7 +50,15 @@ After the edits, whenever the counter is updated by clicking `PlusButton`, `Disp
 
 Note how little change is required to replace local state with shared state, which is a typical task in the development of an app (and yet not so quickly achieved with many other approaches to shared state management).
 
-You might have noticed the `false` parameter of `useStore()` in `PlusButton`. This is a way to tell the hook not to re-render the component when the store gets updated. Unlike `Display`, `PlusButton` doesn't use the `counter` value, so it doesn't need to track the store updates. (Apart from a boolean value, the second parameter of `useStore()` can also be a function of `(nextState, prevState)` returning a boolean, allowing to fine-tune responsiveness to store updates.)
+The `Store` class and the `useStore()` hook together do the trick of the shared state management.
+
+### Fine-tuning responsiveness to store updates
+
+You might have noticed the `false` parameter of `useStore()` in `PlusButton`. This is a way to tell the hook not to re-render the component when the store gets updated. Unlike `Display`, `PlusButton` doesn't use the `counter` value, so it doesn't need to track the store updates.
+
+Apart from a boolean value, the second parameter of `useStore()` can also be a function of `(nextState, prevState)` returning a boolean, allowing for subtler fine-tuning of responsiveness to store updates.
+
+### Store provider
 
 You might also notice there's no Context Provider in the example above: the components make use of the default Context value passed to `createContext()`. In more complex apps (especially with SSR), an appropriate Context Provider can be added to specify the initial state:
 
@@ -63,11 +71,11 @@ You might also notice there's no Context Provider in the example above: the comp
 + );
 ```
 
+### Store data
+
 In the example above, an instance of the `Store` class wraps a primitive value, but there can be data of any type.
 
-The `Store` class and the `useStore()` hook together do the trick of the shared state management.
-
-## Multiple stores
+### Multiple stores
 
 An application can have as many stores as needed, whether on a single Context or multiple Contexts.
 
