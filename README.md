@@ -7,11 +7,7 @@ Minimalist shared state management for React apps
 - SSR-compatible
 - Lightweight
 
-## Installation
-
-```
-npm i groundstate
-```
+Installation: `npm i groundstate`
 
 ## Usage
 
