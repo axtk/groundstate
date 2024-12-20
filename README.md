@@ -1,4 +1,4 @@
-[![npm](https://img.shields.io/npm/v/groundstate?labelColor=royalblue&color=royalblue&style=flat-square)](https://www.npmjs.com/package/groundstate) [![GitHub](https://img.shields.io/badge/-GitHub-royalblue?labelColor=royalblue&color=royalblue&style=flat-square&logo=github)](https://github.com/axtk/groundstate) ![React](https://img.shields.io/badge/%23-React-345?labelColor=345&color=345&style=flat-square) [![SSR](https://img.shields.io/badge/%23-SSR-345?labelColor=345&color=345&style=flat-square)](#server-side-rendering-ssr) ![TypeScript](https://img.shields.io/badge/%23-TypeScript-345?labelColor=345&color=345&style=flat-square)
+[![npm](https://img.shields.io/npm/v/groundstate?labelColor=royalblue&color=royalblue&style=flat-square)](https://www.npmjs.com/package/groundstate) [![GitHub](https://img.shields.io/badge/GitHub-royalblue?style=flat-square&logo=github)](https://github.com/axtk/groundstate) ![React](https://img.shields.io/badge/React-345?style=flat-square) ![SSR](https://img.shields.io/badge/SSR-345?style=flat-square) ![TypeScript](https://img.shields.io/badge/TypeScript-345?style=flat-square)
 
 # groundstate
 
