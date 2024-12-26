@@ -5,7 +5,6 @@ Minimalist shared state management for React apps
 - Easy to set up, similar to `useState()`, no boilerplate code
 - Painless transition from local state to shared state and vice versa
 - SSR-compatible
-- Lightweight
 
 Installation: `npm i groundstate`
 
@@ -46,7 +45,7 @@ Note how little change is required to replace local state with shared state, whi
 
 The `Store` class and the `useStore()` hook together do the trick of the shared state management.
 
-### Fine-tuning responsiveness to store updates
+### Responsiveness to store updates
 
 You might have noticed the `false` parameter of `useStore()` in `PlusButton`. This is a way to tell the hook not to re-render the component when the store gets updated. Unlike `Display`, `PlusButton` doesn't use the `counter` value, so it doesn't need to track the store updates.
 
