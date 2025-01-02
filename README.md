@@ -8,7 +8,7 @@ Minimalist shared state management for React apps
 
 Installation: `npm i groundstate`
 
-## Usage
+## Shared state
 
 Let's take two components containing counters stored in their local states via React's `useState()`, isolated from each other. Let's see what should be edited to share the counter between these components.
 
@@ -93,9 +93,9 @@ In this example, the `UserCard` component uses only the `users` store from `AppC
 
 Note that a store is picked from the Context just like any other value on a Context. The Context may as well contain other non-store items alongside stores if need be. A store (whether from the Context or elsewhere) is passed to the `useStore()` hook to unpack the current store state and subscribe the component to the store updates.
 
-## Other use cases
+## Persistent local state
 
-### Persistent local state
+### State persistence across remounts
 
 Maintaining local state of a component with the React's `useState()` hook is commonplace and works fine for many cases, but it has its downsides in the popular scenarios:
 
@@ -129,9 +129,9 @@ let List = () => {
 
 In the example above, if the request completes after the component has unmounted the fetched data will be safely put into `itemStore` and this data will be reused when the component remounts without fetching it again.
 
-### Connecting a store to external storage
+### State persistence across page reloads
 
-`itemStore` from the example above can be further upgraded to make the component state persistent across page reloads without affecting the component's internals.
+`itemStore` from the example above can be further modified to make the component state persistent across page reloads without affecting the component's internals.
 
 ```js
 let initialState;
@@ -158,9 +158,9 @@ let List = () => {
 };
 ```
 
-### Direct subscription to store updates
+## Direct subscription to store updates
 
-For some purposes (like logging or debugging the data flow), it might be helpful to directly subscribe to state updates via the store's `subscribe()` method:
+For some purposes (like logging or debugging the data flow), it might be helpful to directly subscribe to state updates. This can be achieved with the store's `subscribe()` method:
 
 ```jsx
 let App = () => {
@@ -178,6 +178,6 @@ let App = () => {
 };
 ```
 
-### Adding *immer*
+## Adding *immer*
 
 *immer* is not part of this package but it can be used with `useStore()` just the same way as [with `useState()`](https://immerjs.github.io/immer/example-setstate#usestate--immer) to facilitate deeply nested data changes.
