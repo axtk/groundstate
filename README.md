@@ -137,7 +137,7 @@ In the example above, if the request completes after the component has unmounted
 let initialState;
 
 try {
-    initialState = JSON.parse(localStorage.getItem('list'));
+    initialState = JSON.parse(localStorage.getItem('itemStore'));
 }
 catch {}
 
