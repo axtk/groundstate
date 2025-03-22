@@ -178,6 +178,20 @@ let App = () => {
 };
 ```
 
+## Comparison to other state management libs
+
+Long story short: Most other libs (like *redux*, *zustand*, *jotai*, *MobX*) introduce new APIs, at times pretty elaborate, around the task of shared state management, and don't easily scale from local state to shared state and the other way around. Some of them are battle-tested and of course usable, and yet a bit too overloaded than *groundstate*.
+
+### How is it different from *jotai*?
+
+Although *groundstate* was created without prior familiarity with *jotai*, they do look similar in some aspects. But there is substantial difference between them as well.
+
+*groundstate* requires only one new entity, *store*, to set up shared state. *jotai* introduces two new entities: *atom* and *store* (the latter can be passed as an option to the `useAtom()` hook), adding a level of complexity of distinguishing the two.
+
+*groundstate* offers an option for fine-tuning the subscription to store updates including turning it off altogether (if the state value is never used by the component). *jotai* doesn't offer such an option.
+
+With other substantial differences in the inner workings, *groundstate* is much more lightweight and more focused on the single task of shared state management than *jotai*.
+
 ## Adding *immer*
 
 *immer* is not part of this package but it can be used with `useStore()` just the same way as [with `useState()`](https://immerjs.github.io/immer/example-setstate#usestate--immer) to facilitate deeply nested data changes.
