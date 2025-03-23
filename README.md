@@ -180,7 +180,7 @@ let App = () => {
 
 ## Comparison to other state management libs
 
-Long story short: Most other libs (like *redux*, *zustand*, *jotai*, *MobX*) introduce new APIs, at times pretty elaborate, around the task of shared state management, and don't easily scale from local state to shared state and the other way around. Some of them are battle-tested and of course usable, and yet a bit too overloaded than *groundstate*.
+Long story short: Most other libs (like *redux*, *zustand*, *jotai*, *MobX*) introduce new APIs, at times pretty elaborate, around the task of shared state management, and don't easily scale from local state to shared state and the other way around. Still most of them are working solutions, and yet a bit too overloaded than *groundstate*.
 
 ### How is it different from *jotai*?
 
