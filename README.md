@@ -194,4 +194,4 @@ Although *groundstate* was created without prior familiarity with *jotai*, they 
 
 *groundstate* offers an option for fine-tuning the subscription to store updates including turning it off altogether (if the state value is never used by the component). *jotai* doesn't offer such an option.
 
-With other substantial differences in the inner workings, *groundstate* is much more lightweight and more focused on the single task of shared state management than *jotai*.
+With other substantial differences in the inner workings, compared to *jotai*, *groundstate* is much more lightweight and more focused on the single task of shared state management.
