@@ -39,6 +39,8 @@ let PlusButton = () => {
 let App = () => <><PlusButton/>{' '}<Display/></>;
 ```
 
+[Live demo](https://codesandbox.io/p/sandbox/trcg3p)
+
 After the edits, whenever the counter is updated by clicking `PlusButton`, `Display` gets notified and re-rendered with the new counter value.
 
 Note how little change is required to replace local state with shared state, which is a typical task in the development of an app (and yet not so quickly achieved with many other approaches to shared state management).
@@ -67,6 +69,8 @@ You might also notice there's no Context Provider in the example above: the comp
 ### Store data
 
 In the example above, an instance of the `Store` class wraps a primitive value, but there can be data of any type.
+
+[Object state live demo](https://codesandbox.io/p/sandbox/m2hnnr)
 
 ### Multiple stores
 
@@ -181,3 +185,5 @@ let App = () => {
 ## Adding *immer*
 
 *immer* is not part of this package but it can be used with `useStore()` just the same way as [with `useState()`](https://immerjs.github.io/immer/example-setstate#usestate--immer) to facilitate deeply nested data changes.
+
+[Live demo with *immer*](https://codesandbox.io/p/sandbox/flsh8h)
