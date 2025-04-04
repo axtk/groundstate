@@ -43,19 +43,27 @@ let App = () => <><PlusButton/>{' '}<Display/></>;
 
 After the edits, whenever the counter is updated by clicking `PlusButton`, `Display` gets notified and re-rendered with the new counter value.
 
-Note how little change is required to replace local state with shared state, which is a typical task in the development of an app (and yet not so quickly achieved with many other approaches to shared state management).
+### Closer look at the setup
 
-The `Store` class and the `useStore()` hook together do the trick of the shared state management.
+The simple example above shows the essential parts of the shared state setup. The `Store` class that wraps the shared state value (`new Store(0)` in the code snippet above) provides a way to access and modify the shared state value, and the `useStore()` hook unpacks the shared state value and subscribes the component to its updates (with an option to [fine-tune](#responsiveness-to-store-updates) this subscription).
+
+The instance of the `Store` class sits in a React Context (whether in the value of an explicit Context Provider or in the Context's default value). After the initialization, the reference to the store instance is never updated. The store's state setter (like `setCounter()` in the example above) only updates the store's state value, not the store instance itself. Which means that store state updates don't trigger re-renders in the entire Context. Only the components that explicitly subscribe to updates in the particular store with the `useStore()` hook will be urged to update in response to the store updates. React might still decide to bail out of a component update if the store state value hasn't actually changed to affect the virtual DOM (which is fine to leave this part to React, like with all other component updates).
+
+### Painless transition from local state to shared state and vice versa
+
+Note that in the example above we only had to edit the initialization part of the state value, the rest of the interaction with the value remains the same. This makes the transition from local state to shared state and the other way around nearly effortless (compared to many other approaches to shared state out there).
+
+The easiness of such transition really matters since shared state is a very common part of web apps. Shared state often evolves from local state, and normally, for the sake of performance and maintainability, local state should be preferred as long as there's no actual need to use this state outside of the component. However, with a bulky shared state setup (provided by some other approaches), a developer might get tempted to store more data in the shared state before it's actually shared to avoid massive future rewrites but potentially impairing the application performance. Groundstate mitigates this temptation by significantly reducing the pain of lifting local state to shared state.
 
 ### Responsiveness to store updates
 
-You might have noticed the `false` parameter of `useStore()` in `PlusButton`. This is a way to tell the hook not to re-render the component when the store gets updated. Unlike `Display`, `PlusButton` doesn't use the `counter` value, so it doesn't need to track the store updates.
+You could notice the `false` parameter of `useStore()` in `PlusButton` in the example above. This is a way to tell the hook not to re-render the component when the store gets updated. Unlike `Display`, `PlusButton` doesn't use the `counter` value, so it doesn't need to track the store updates.
 
 Apart from a boolean value, the second parameter of `useStore()` can also be a function of `(nextState, prevState)` returning a boolean, allowing for subtler fine-tuning of responsiveness to store updates.
 
 ### Store provider
 
-You might also notice there's no Context Provider in the example above: the components make use of the default Context value passed to `createContext()`. In more complex apps (especially with SSR), an appropriate Context Provider can be added to specify the initial state:
+You could also notice there's no Context Provider in the example above: the components make use of the default Context value passed to `createContext()`. In more complex apps (especially with SSR), an appropriate Context Provider can be added to specify the initial state:
 
 ```diff
 - let App = () => <><PlusButton/>{' '}<Display/></>;
