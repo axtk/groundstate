@@ -59,7 +59,7 @@ The easiness of such transition really matters since shared state is a very comm
 
 You could notice the `false` parameter of `useStore()` in `PlusButton` in the example above. This is a way to tell the hook not to re-render the component when the store gets updated. Unlike `Display`, `PlusButton` doesn't use the `counter` value, so it doesn't need to track the store updates.
 
-Apart from a boolean value, the second parameter of `useStore()` can also be a function of `(nextState, prevState)` returning a boolean, allowing for subtler fine-tuning of responsiveness to store updates.
+Apart from a boolean value, the second parameter of `useStore()` can also be a function of `(nextState, prevState)` returning a boolean, allowing for subtler fine-tuning of responsiveness to store updates. For more details, see [Filtering store updates](#filtering-store-updates).
 
 ### Store provider
 
@@ -99,13 +99,68 @@ let AppContext = createContext({
 let UserCard = ({userId}) => {
     let [users, setUsers] = useStore(useContext(AppContext).users);
 
-    // ...
+    // rendering
 };
 ```
 
 In this example, the `UserCard` component uses only the `users` store from `AppContext`. It won't be re-rendered if the contents of the `articles` store gets updated (just as intended).
 
 Note that a store is picked from the Context just like any other value on a Context. The Context may as well contain other non-store items alongside stores if need be. A store (whether from the Context or elsewhere) is passed to the `useStore()` hook to unpack the current store state and subscribe the component to the store updates.
+
+## Filtering store updates
+
+As previously mentioned, although not a requirement, one way to reduce component updates in response to shared state updates is to split the shared data into a number of more scoped stores.
+
+Let's assume again we've got a component that uses a store from the following store setup (the number of stores doesn't really matter here, it can be one store or multiple stores):
+
+```jsx
+let AppContext = createContext({
+    users: new Store(/* ... */),
+    articles: new Store(/* ... */),
+});
+```
+
+As either store from this setup grows larger, we may want to filter incoming store updates in the component in a more granular fashion, beyond splitting into the two stores. Below, we'll add the second parameter to the `useStore()` hook to tell it when to respond to the `users` store updates:
+
+```diff
+let UserCard = ({userId}) => {
+    let [users, setUsers] = useStore(
+        useContext(AppContext).users,
++       useCallback((nextUsers, prevUsers) => {
++          return nextUsers[userId].lastModified > prevUsers[userId].lastModified;
++       }, [userId]),
+    );
+
+    // rendering
+};
+```
+
+Now, the `UserCard` component will only respond to the `users` store changes if the `lastModified` timestamp in the `userId` entry has changed. Depending on the data, we could as well provide another filter function like comparing a `revision` field value or carrying out a deep comparison of the next and previous user values.
+
+For the sake of readability, we may want to move such a filter function to a separate file, especially if it recurs across multiple parts of the application:
+
+```js
+import {useCallback} from 'react';
+
+export function useChangeByLastModified(id) {
+    return useCallback((next, prev) => {
+        return next[id].lastModified > prev[id].lastModified;
+    }, [id]);
+}
+```
+
+```diff
++ import {useChangeByLastModified} from './useChangeByLastModified';
+
+let UserCard = ({userId}) => {
+    let [users, setUsers] = useStore(
+        useContext(AppContext).users,
++       useChangeByLastModified(userId),
+    );
+
+    // rendering
+};
+```
 
 ## Persistent local state
 
