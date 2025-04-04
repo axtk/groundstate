@@ -120,7 +120,7 @@ let AppContext = createContext({
 });
 ```
 
-As either store from this setup grows larger, we may want to filter incoming store updates in the component in a more granular fashion, beyond splitting into the two stores. Below, we'll add the second parameter to the `useStore()` hook to tell it when to respond to the `users` store updates:
+As either store from this setup grows larger, we may want to filter incoming store updates in the component in a more granular fashion, beyond splitting the data into the two stores. Below, we'll add the second parameter to the `useStore()` hook to tell it when to respond to the `users` store updates. We'll assume that the `users` store contains an id-value map of user objects, each with its own `lastModified` timestamp.
 
 ```diff
 let UserCard = ({userId}) => {
@@ -135,7 +135,7 @@ let UserCard = ({userId}) => {
 };
 ```
 
-Now, the `UserCard` component will only respond to the `users` store changes if the `lastModified` timestamp in the `userId` entry has changed. Depending on the data, we could as well provide another filter function like comparing a `revision` field value or carrying out a deep comparison of the next and previous user values.
+Now, the `UserCard` component will only respond to the `users` store changes if the `lastModified` timestamp in the `userId` entry has changed. Depending on the data, we could as well provide another filter function like comparing a `revision` field value (if there was one) or carrying out a deep comparison of the next and previous user values.
 
 For the sake of readability, we may want to move such a filter function to a separate file, especially if it recurs across multiple parts of the application:
 
@@ -161,6 +161,8 @@ let UserCard = ({userId}) => {
     // rendering
 };
 ```
+
+Recap: With a larger store, the number of the component's updates in response to the store updates can be reduced by providing a filter function of `(nextState, prevState)` as the optional second parameter of the `useStore()` hook.
 
 ## Persistent local state
 
