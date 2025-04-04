@@ -39,7 +39,7 @@ let PlusButton = () => {
 let App = () => <><PlusButton/>{' '}<Display/></>;
 ```
 
-[Live demo](https://codesandbox.io/p/sandbox/trcg3p)
+[Live demo](https://codesandbox.io/p/sandbox/trcg3p?file=%2Fsrc%2FPlusButton.jsx)
 
 After the edits, whenever the counter is updated by clicking `PlusButton`, `Display` gets notified and re-rendered with the new counter value.
 
@@ -70,7 +70,9 @@ You might also notice there's no Context Provider in the example above: the comp
 
 In the example above, an instance of the `Store` class wraps a primitive value, but there can be data of any type.
 
-[Object state live demo](https://codesandbox.io/p/sandbox/m2hnnr)
+Live demos:<br>
+[Primitive value state](https://codesandbox.io/p/sandbox/trcg3p?file=%2Fsrc%2FPlusButton.jsx)<br>
+[Object value state](https://codesandbox.io/p/sandbox/m2hnnr?file=%2Fsrc%2FPlusButton.jsx)
 
 ### Multiple stores
 
@@ -186,4 +188,4 @@ let App = () => {
 
 *immer* is not part of this package but it can be used with `useStore()` just the same way as [with `useState()`](https://immerjs.github.io/immer/example-setstate#usestate--immer) to facilitate deeply nested data changes.
 
-[Live demo with *immer*](https://codesandbox.io/p/sandbox/flsh8h)
+[Live demo with *immer*](https://codesandbox.io/p/sandbox/flsh8h?file=%2Fsrc%2FPlusButton.jsx)
