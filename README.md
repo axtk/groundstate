@@ -143,8 +143,8 @@ For the sake of readability, we may want to move such a filter function to a sep
 import {useCallback} from 'react';
 
 export function useChangeByLastModified(id) {
-    return useCallback((next, prev) => {
-        return next[id].lastModified > prev[id].lastModified;
+    return useCallback((nextState, prevState) => {
+        return nextState[id].lastModified > prevState[id].lastModified;
     }, [id]);
 }
 ```
@@ -162,7 +162,7 @@ let UserCard = ({userId}) => {
 };
 ```
 
-Recap: With a larger store, the number of the component's updates in response to the store updates can be reduced by providing a filter function of `(nextState, prevState)` as the optional second parameter of the `useStore()` hook.
+**Recap**: With a larger store, the number of the component's updates in response to the store updates can be reduced by providing a filter function of `(nextState, prevState)` as the optional second parameter of the `useStore()` hook.
 
 ## Persistent local state
 
