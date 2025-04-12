@@ -10,7 +10,7 @@ Installation: `npm i groundstate`
 
 ## Shared state
 
-Let's take two components containing counters stored in their local states via React's `useState()`, isolated from each other. Let's see what should be edited to share the counter between these components.
+Let's take two components containing counters stored in their local states via React's `useState()`, isolated from each other. Let's see what should be edited to share the counter value between these components.
 
 ```diff
 import {createContext, useContext} from 'react';
@@ -41,42 +41,38 @@ let App = () => <><PlusButton/>{' '}<Display/></>;
 
 [Live demo](https://codesandbox.io/p/sandbox/trcg3p?file=%2Fsrc%2FPlusButton.jsx)
 
-After the edits, whenever the counter is updated by clicking `PlusButton`, `Display` gets notified and re-rendered with the new counter value.
+With these few edits, we transformed a local state setup to a shared state setup. Whenever the counter is incremented by clicking `PlusButton`, the `Display` component gets notified and updated with the new counter value.
 
-### Closer look at the setup
-
-The simple example above shows the essential parts of the shared state setup. The `Store` class that wraps the shared state value (`new Store(0)` in the code snippet above) provides a way to access and modify the shared state value, and the `useStore()` hook unpacks the shared state value and subscribes the component to its updates (with an option to [fine-tune](#responsiveness-to-store-updates) this subscription).
-
-The instance of the `Store` class sits in a React Context (whether in the value of an explicit Context Provider or in the Context's default value). After the initialization, the reference to the store instance is never updated. The store's state setter (like `setCounter()` in the example above) only updates the store's state value, not the store instance itself. Which means that store state updates don't trigger re-renders in the entire Context. Only the components that explicitly subscribe to updates in the particular store with the `useStore()` hook will be urged to update in response to the store updates. React might still decide to bail out of a component update if the store state value hasn't actually changed to affect the virtual DOM (which is fine to leave this part to React, like with all other component updates).
+The example above shows the essential parts of the Groundstate's shared state setup. The `Store` class serves as a container for the shared state value (`new Store(0)` in the code snippet above) that provides a way to access and modify this value, while the `useStore()` hook unpacks the shared state value and subscribes the component to its updates (with an option to [fine-tune](#responsiveness-to-store-updates) this subscription).
 
 ### Painless transition from local state to shared state and vice versa
 
-Note that in the example above we only had to edit the initialization part of the state value, the rest of the interaction with the value remains the same. This makes the transition from local state to shared state and the other way around nearly effortless (compared to many other approaches to shared state out there).
+In the example above, we only had to edit the initialization part of the state value, the rest of the interaction with the value remains the same as with React's `useState()`. This makes the transition from local state to shared state and the other way around nearly effortless.
 
-The easiness of such transition really matters since shared state is a very common part of web apps. Shared state often evolves from local state, and normally, for the sake of performance and maintainability, local state should be preferred as long as there's no actual need to use this state outside of the component. However, with a bulky shared state setup (provided by some other approaches), a developer might get tempted to store more data in the shared state before it's actually shared to avoid massive future rewrites but potentially impairing the application performance. Groundstate mitigates this temptation by significantly reducing the pain of lifting local state to shared state.
+The effort cost of this transition really matters since shared state is a very common part of web apps and it often evolves from local state. The Groundstate's shared state setup helps reduce the effort of migrating from local state to shared state (or vice versa) to a minimum.
 
 ### Responsiveness to store updates
 
-You could notice the `false` parameter of `useStore()` in `PlusButton` in the example above. This is a way to tell the hook not to re-render the component when the store gets updated. Unlike `Display`, `PlusButton` doesn't use the `counter` value, so it doesn't need to track the store updates.
+In the example above, `useStore()` in `PlusButton` has the second parameter set to `false`. This is a way to tell the hook not to re-render the component when the store gets updated. Unlike `Display`, `PlusButton` doesn't use the `counter` value, so it doesn't need to track the store updates.
 
 Apart from a boolean value, the second parameter of `useStore()` can also be a function of `(nextState, prevState)` returning a boolean, allowing for subtler fine-tuning of responsiveness to store updates. For more details, see [Filtering store updates](#filtering-store-updates).
 
 ### Store provider
 
-You could also notice there's no Context Provider in the example above: the components make use of the default Context value passed to `createContext()`. In more complex apps (especially with SSR), an appropriate Context Provider can be added to specify the initial state:
+In the example above, there's no explicit Context Provider: the components make use of the default Context value passed to `createContext()`. In more complex apps (especially with SSR), an appropriate Context Provider can be added to specify the initial state:
 
 ```diff
-- let App = () => <><PlusButton/>{' '}<Display/></>;
-+ let App = () => (
+  let App = () => (
+-   <AppContext.Provider value={42}>
 +   <AppContext.Provider value={new Store(42)}>
-+       <PlusButton/>{' '}<Display/>
-+   </AppContext.Provider>
-+ );
+        <PlusButton/>{' '}<Display/>
+    </AppContext.Provider>
+  );
 ```
 
 ### Store data
 
-In the example above, an instance of the `Store` class wraps a primitive value, but there can be data of any type.
+In the example above, an instance of the `Store` class contains a primitive value, but there can be data of any type.
 
 Live demos:<br>
 [Primitive value state](https://codesandbox.io/p/sandbox/trcg3p?file=%2Fsrc%2FPlusButton.jsx)<br>
@@ -135,7 +131,7 @@ let UserCard = ({userId}) => {
 };
 ```
 
-Now, the `UserCard` component will only respond to the `users` store changes if the `lastModified` timestamp in the `userId` entry has changed. Depending on the data, we could as well provide another filter function like comparing a `revision` field value (if there was one) or carrying out a deep comparison of the next and previous user values.
+Now, the `UserCard` component will only respond to the `users` store changes if the `lastModified` timestamp in the `userId` entry has changed. Depending on the data, we could instead provide another filter function like comparing a `revision` field value (if there was one) or carrying out deep comparison of the next and previous user values.
 
 For the sake of readability, we may want to move such a filter function to a separate file, especially if it recurs across multiple parts of the application:
 
