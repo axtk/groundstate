@@ -59,7 +59,7 @@ Apart from a boolean value, the second parameter of `useStore()` can also be a f
 
 ### Store provider
 
-In the example above, there's no explicit Context Provider: the components make use of the default Context value passed to `createContext()`. In more complex apps (especially with SSR), an appropriate Context Provider can be added to specify the initial state:
+A Groundstate store can live in a regular React Context. In the example above, there's no explicit Context Provider: the components make use of the default Context value passed to `createContext()`. In more complex apps (especially with SSR), an appropriate Context Provider can be added to specify the initial state:
 
 ```diff
   let App = () => (
@@ -69,6 +69,8 @@ In the example above, there's no explicit Context Provider: the components make 
     </AppContext.Provider>
   );
 ```
+
+A store is picked from the Context just like any other value on a Context. The Context may as well contain other non-store items alongside stores if need be. A store (whether from the Context or elsewhere) is then passed to the `useStore()` hook to unpack the current store state and subscribe the component to the store updates.
 
 ### Store data
 
@@ -101,7 +103,7 @@ let UserCard = ({userId}) => {
 
 In this example, the `UserCard` component uses only the `users` store from `AppContext`. It won't be re-rendered if the contents of the `articles` store gets updated (just as intended).
 
-Note that a store is picked from the Context just like any other value on a Context. The Context may as well contain other non-store items alongside stores if need be. A store (whether from the Context or elsewhere) is passed to the `useStore()` hook to unpack the current store state and subscribe the component to the store updates.
+Note that the `users` store is picked from the Context just like any other value inside a Context.
 
 ## Filtering store updates
 
