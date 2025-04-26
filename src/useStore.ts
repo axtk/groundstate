@@ -1,4 +1,4 @@
-import {useEffect, useMemo, useState} from 'react';
+import {useEffect, useMemo, useRef, useState} from 'react';
 import {Store} from './Store';
 
 export type SetStoreState<T> = Store<T>['setState'];
@@ -29,6 +29,7 @@ export function useStore<T>(
         throw new Error('\'store\' is not an instance of Store');
 
     let [, setRevision] = useState(-1);
+    let initedRef = useRef(false);
 
     let state = store.getState();
     let setState = useMemo(() => store.setState.bind(store), [store]);
@@ -36,6 +37,11 @@ export function useStore<T>(
     useEffect(() => {
         if (!isResponsive)
             return;
+
+        if (!initedRef.current) {
+            initedRef.current = true;
+            setRevision(Math.random());
+        }
 
         return store.subscribe((nextState, prevState) => {
             if (typeof isResponsive !== 'function' || isResponsive(nextState, prevState))
