@@ -1,4 +1,5 @@
 import {useEffect, useMemo, useRef, useState} from 'react';
+import {isStore} from './isStore';
 import {Store} from './Store';
 
 export type SetStoreState<T> = Store<T>['setState'];
@@ -25,7 +26,7 @@ export function useStore<T>(
      */
     isResponsive: boolean | IsResponsive<T> = true,
 ): [T, SetStoreState<T>] {
-    if (!(store instanceof Store))
+    if (!isStore(store))
         throw new Error('\'store\' is not an instance of Store');
 
     let [, setRevision] = useState(-1);
