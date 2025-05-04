@@ -7,16 +7,19 @@ function assert(value: unknown, expectedValue: unknown) {
 
     console.log(`000${++testIndex}`.slice(-3), valid ? 'PASSED' : 'FAILED');
 
-    if (!valid)
-        throw new Error(`Expected ${expectedValue}, got ${value}.`);
+    if (!valid) throw new Error(`Expected ${expectedValue}, got ${value}.`);
 }
 
 let store = new Store(10);
 
 let testValue = [100, -3];
 let unsubscribe = [
-    store.subscribe(state => testValue[0] += state),
-    store.subscribe(state => testValue[1] *= state),
+    store.subscribe(state => {
+        testValue[0] += state;
+    }),
+    store.subscribe(state => {
+        testValue[1] *= state;
+    }),
 ];
 
 assert(store.getState(), 10);
