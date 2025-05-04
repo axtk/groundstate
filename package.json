@@ -11,7 +11,7 @@
     "gh-pages": "npx ghstage --color-scheme=mediumseagreen --theme=tiles --ymid=101149630 --jsorg",
     "prepublishOnly": "npm-run-all build gh-pages",
     "preversion": "npm-run-all shape test",
-    "shape": "npx codeshape src index.ts",
+    "shape": "npx codeshape",
     "test": "npm-run-all build test:compile test:run",
     "test:compile": "esbuild tests.ts --bundle --outdir=dist --platform=neutral",
     "test:run": "node dist/tests.js"
