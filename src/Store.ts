@@ -13,8 +13,7 @@ export class Store<T> {
 
         return () => {
             for (let i = this.callbacks.length - 1; i >= 0; i--) {
-                if (this.callbacks[i] === callback)
-                    this.callbacks.splice(i, 1);
+                if (this.callbacks[i] === callback) this.callbacks.splice(i, 1);
             }
         };
     }
@@ -23,11 +22,11 @@ export class Store<T> {
     }
     setState(update: T | StoreStateUpdate<T>) {
         let prevState = this.state;
-        let nextState = update instanceof Function ? update(this.state) : update;
+        let nextState =
+            update instanceof Function ? update(this.state) : update;
 
         this.state = nextState;
 
-        for (let callback of this.callbacks)
-            callback(nextState, prevState);
+        for (let callback of this.callbacks) callback(nextState, prevState);
     }
 }

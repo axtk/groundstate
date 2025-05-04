@@ -5,12 +5,13 @@
   "main": "dist/index.js",
   "type": "module",
   "scripts": {
-    "build": "npm-run-all clean compile",
+    "build": "npm-run-all shape clean compile",
     "clean": "node -e \"require('node:fs').rmSync('dist', {force: true, recursive: true});\"",
     "compile": "esbuild index.ts --bundle --outdir=dist --platform=neutral --external:react",
     "gh-pages": "npx ghstage --color-scheme=mediumseagreen --theme=tiles --ymid=101149630 --jsorg",
     "prepublishOnly": "npm-run-all build gh-pages",
     "preversion": "npm run test",
+    "shape": "npx codeshape src index.ts",
     "test": "npm-run-all build test:compile test:run",
     "test:compile": "esbuild tests.ts --bundle --outdir=dist --platform=neutral",
     "test:run": "node dist/tests.js"
