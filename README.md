@@ -41,7 +41,7 @@ Let's assume we've got two components with counters in their local states provid
 
 [Live demo](https://codesandbox.io/p/sandbox/trcg3p?file=%2Fsrc%2FPlusButton.jsx)
 
-With these few edits (React Context + `Store` + `useStore()`), we transformed the local state to the shared state. Whenever the counter is incremented by clicking `PlusButton`, the `Display` component gets notified and updated with the new counter value. Note that the interaction with the state remains intact.
+With these few edits (React Context + `Store` + `useStore()`), we transformed the local state into the full-fledged shared state. Whenever the counter is incremented by clicking `PlusButton`, the `Display` component gets notified and updated with the new counter value. Note that the interaction with the state remains intact.
 
 The example above shows the essential parts of the Groundstate's shared state setup. The `Store` class serves as a container for the shared state value (`new Store(0)` in the code block above) that provides a way to access and modify this value, while the `useStore()` hook unpacks the shared state value and subscribes the component to its updates (with an option to [fine-tune](#responsiveness-to-store-updates) this subscription).
 
@@ -59,7 +59,7 @@ Apart from a boolean value, the second parameter of `useStore()` can also be a f
 
 ### Store provider
 
-A Groundstate store can live in a regular React Context. In the example above, there's no explicit Context Provider: the components make use of the default Context value passed to `createContext()`. In more complex apps (especially with SSR), an appropriate Context Provider can be added to specify the initial state:
+A Groundstate store can live in a regular React Context. In the example above, there's no explicit Context Provider: the components make use of the default Context value passed to `createContext()`. In more complex setups (especially with SSR), an appropriate Context Provider can be added to specify the initial state:
 
 ```diff
   let App = () => (
