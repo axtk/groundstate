@@ -10,12 +10,12 @@ Installation: `npm i groundstate`
 
 ## Shared state
 
-Let's take two components containing counters stored in their local states via React's `useState()`, isolated from each other. Let's see what should be edited to share the counter value between these components.
+Let's assume we've got two components with counters in their local states provided by React's `useState()`. Both counters are isolated from each other. Now, let's share a single counter value between these components:
 
 ```diff
   import {createContext, useContext} from 'react';
 + import {Store, useStore} from 'groundstate';
-
++
 + let AppContext = createContext(new Store(0));
 
   let Display = () => {
@@ -41,9 +41,9 @@ Let's take two components containing counters stored in their local states via R
 
 [Live demo](https://codesandbox.io/p/sandbox/trcg3p?file=%2Fsrc%2FPlusButton.jsx)
 
-With these few edits, we transformed a local state setup to a shared state setup. Whenever the counter is incremented by clicking `PlusButton`, the `Display` component gets notified and updated with the new counter value.
+With these few edits (React Context + `Store` + `useStore()`), we transformed the local state to the shared state. Whenever the counter is incremented by clicking `PlusButton`, the `Display` component gets notified and updated with the new counter value. Note that the interaction with the state remains intact.
 
-The example above shows the essential parts of the Groundstate's shared state setup. The `Store` class serves as a container for the shared state value (`new Store(0)` in the code snippet above) that provides a way to access and modify this value, while the `useStore()` hook unpacks the shared state value and subscribes the component to its updates (with an option to [fine-tune](#responsiveness-to-store-updates) this subscription).
+The example above shows the essential parts of the Groundstate's shared state setup. The `Store` class serves as a container for the shared state value (`new Store(0)` in the code block above) that provides a way to access and modify this value, while the `useStore()` hook unpacks the shared state value and subscribes the component to its updates (with an option to [fine-tune](#responsiveness-to-store-updates) this subscription).
 
 ### Painless transition from local state to shared state and vice versa
 
