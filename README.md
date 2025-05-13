@@ -13,30 +13,30 @@ Installation: `npm i groundstate`
 Let's take two components containing counters stored in their local states via React's `useState()`, isolated from each other. Let's see what should be edited to share the counter value between these components.
 
 ```diff
-import {createContext, useContext} from 'react';
+  import {createContext, useContext} from 'react';
 + import {Store, useStore} from 'groundstate';
 
 + let AppContext = createContext(new Store(0));
 
-let Display = () => {
--   let [counter] = useState(0); // somewhat contrived, never updated
-+   let [counter] = useStore(useContext(AppContext));
+  let Display = () => {
+-     let [counter] = useState(0); // somewhat contrived, never updated
++     let [counter] = useStore(useContext(AppContext));
 
-    return <span>{counter}</span>;
-};
+      return <span>{counter}</span>;
+  };
 
-let PlusButton = () => {
--   let [, setCounter] = useState(0);
-+   let [, setCounter] = useStore(useContext(AppContext), false);
+  let PlusButton = () => {
+-     let [, setCounter] = useState(0);
++     let [, setCounter] = useStore(useContext(AppContext), false);
 
-    let handleClick = () => {
-        setCounter(value => value + 1);
-    };
+      let handleClick = () => {
+          setCounter(value => value + 1);
+      };
 
-    return <button onClick={handleClick}>+</button>;
-};
+      return <button onClick={handleClick}>+</button>;
+  };
 
-let App = () => <><PlusButton/>{' '}<Display/></>;
+  let App = () => <><PlusButton/>{' '}<Display/></>;
 ```
 
 [Live demo](https://codesandbox.io/p/sandbox/trcg3p?file=%2Fsrc%2FPlusButton.jsx)
@@ -63,10 +63,10 @@ A Groundstate store can live in a regular React Context. In the example above, t
 
 ```diff
   let App = () => (
--   <AppContext.Provider value={42}>
-+   <AppContext.Provider value={new Store(42)}>
-        <PlusButton/>{' '}<Display/>
-    </AppContext.Provider>
+-     <AppContext.Provider value={42}>
++     <AppContext.Provider value={new Store(42)}>
+          <PlusButton/>{' '}<Display/>
+      </AppContext.Provider>
   );
 ```
 
@@ -121,16 +121,16 @@ let AppContext = createContext({
 As either store from this setup grows larger, we may want to filter incoming store updates in the component in a more granular fashion, beyond splitting the data into the two stores. Below, we'll add the second parameter to the `useStore()` hook to tell it when to respond to the `users` store updates. We'll assume that the `users` store contains an id-value map of user objects, each with its own `lastModified` timestamp.
 
 ```diff
-let UserCard = ({userId}) => {
-    let [users, setUsers] = useStore(
-        useContext(AppContext).users,
-+       useCallback((nextUsers, prevUsers) => {
-+          return nextUsers[userId].lastModified > prevUsers[userId].lastModified;
-+       }, [userId]),
-    );
+  let UserCard = ({userId}) => {
+      let [users, setUsers] = useStore(
+          useContext(AppContext).users,
++         useCallback((nextUsers, prevUsers) => {
++            return nextUsers[userId].lastModified > prevUsers[userId].lastModified;
++         }, [userId]),
+      );
 
-    // rendering
-};
+      // rendering
+  };
 ```
 
 Now, the `UserCard` component will only respond to the `users` store changes if the `lastModified` timestamp in the `userId` entry has changed. Depending on the data, we could instead provide another filter function like comparing a `revision` field value (if there was one) or carrying out deep comparison of the next and previous user values.
@@ -150,14 +150,14 @@ export function useChangeByLastModified(id) {
 ```diff
 + import {useChangeByLastModified} from './useChangeByLastModified';
 
-let UserCard = ({userId}) => {
-    let [users, setUsers] = useStore(
-        useContext(AppContext).users,
-+       useChangeByLastModified(userId),
-    );
+  let UserCard = ({userId}) => {
+      let [users, setUsers] = useStore(
+          useContext(AppContext).users,
++         useChangeByLastModified(userId),
+      );
 
-    // rendering
-};
+      // rendering
+  };
 ```
 
 **Recap**: With a larger store, the number of the component's updates in response to the store updates can be reduced by providing a filter function of `(nextState, prevState)` as the optional second parameter of the `useStore()` hook.
@@ -179,21 +179,21 @@ Both of these issues can be addressed by using a store created outside of the co
 ```diff
 + let itemStore = new Store();
 
-let List = () => {
--   let [items, setItems] = useState();
-+   let [items, setItems] = useStore(itemStore);
+  let List = () => {
+-     let [items, setItems] = useState();
++     let [items, setItems] = useStore(itemStore);
 
-    useEffect(() => {
-        if (items !== undefined)
-            return;
+      useEffect(() => {
+          if (items !== undefined)
+              return;
 
-        fetch('/items')
-            .then(res => res.json())
-            .then(items => setItems(items));
-    }, [items]);
+          fetch('/items')
+              .then(res => res.json())
+              .then(items => setItems(items));
+      }, [items]);
 
-    // ... rendering
-};
+      // ... rendering
+  };
 ```
 
 In the example above, if the request completes after the component has unmounted the fetched data will be safely put into `itemStore` and this data will be reused when the component remounts without fetching it again.
