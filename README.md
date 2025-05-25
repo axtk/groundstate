@@ -1,3 +1,5 @@
+[![npm](https://flat.badgen.net/npm/v/groundstate?labelColor=345&color=46e)](https://www.npmjs.com/package/groundstate) ![Lightweight](https://flat.badgen.net/bundlephobia/minzip/groundstate/?labelColor=345&color=46e) ![TypeScript ✓](https://flat.badgen.net/badge/TypeScript/✓?labelColor=345&color=345) ![SSR ✓](https://flat.badgen.net/badge/SSR/✓?labelColor=345&color=345)
+
 # groundstate
 
 *Minimalist shared state management for React apps*
