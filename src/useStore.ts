@@ -3,7 +3,8 @@ import type {Store} from './Store';
 import {isStore} from './isStore';
 
 export type SetStoreState<T> = Store<T>['setState'];
-export type IsResponsive<T> = (nextState: T, prevState: T) => boolean;
+export type ShouldUpdateCallback<T> = (nextState: T, prevState: T) => boolean;
+export type ShouldUpdate<T> = boolean | ShouldUpdateCallback<T>;
 
 export function useStore<T>(
     store: Store<T>,
@@ -24,7 +25,7 @@ export function useStore<T>(
      * Can be set to a function `(nextState, prevState) => boolean` to
      * make the component respond only to specific store state changes.
      */
-    isResponsive: boolean | IsResponsive<T> = true,
+    shouldUpdate: ShouldUpdate<T> = true,
 ): [T, SetStoreState<T>] {
     if (!isStore(store)) throw new Error("'store' is not an instance of Store");
 
@@ -35,7 +36,7 @@ export function useStore<T>(
     let setState = useMemo(() => store.setState.bind(store), [store]);
 
     useEffect(() => {
-        if (!isResponsive) return;
+        if (!shouldUpdate) return;
 
         if (!initedRef.current) {
             initedRef.current = true;
@@ -44,12 +45,12 @@ export function useStore<T>(
 
         return store.subscribe((nextState, prevState) => {
             if (
-                typeof isResponsive !== 'function' ||
-                isResponsive(nextState, prevState)
+                typeof shouldUpdate !== 'function' ||
+                shouldUpdate(nextState, prevState)
             )
                 setRevision(Math.random());
         });
-    }, [store, isResponsive]);
+    }, [store, shouldUpdate]);
 
     return [state, setState];
 }
