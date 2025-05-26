@@ -69,7 +69,7 @@ let ItemCard = ({id}) => {
         return nextItems[id].revision !== prevItems[id].revision;
     }, [id]);
 
-    let [users, setUsers] = useStore(
+    let [items, setItems] = useStore(
         useContext(AppContext).items,
         hasRelevantUpdates,
     );
