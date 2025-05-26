@@ -101,4 +101,4 @@ Live demos:<br>
 
 [Live demo with Immer](https://codesandbox.io/p/sandbox/flsh8h?file=%2Fsrc%2FPlusButton.jsx)
 
-🔹 A store initialized outside a component (not necessarily on a React Context) can be used as a remount-persistent state.
+🔹 A store initialized outside a component can be used as the component's remount-persistent state.
