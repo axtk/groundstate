@@ -1,6 +1,6 @@
 import {useEffect, useMemo, useRef, useState} from 'react';
-import type {Store} from './Store';
 import {isStore} from './isStore';
+import type {Store} from './Store';
 
 export type SetStoreState<T> = Store<T>['setState'];
 export type ShouldUpdateCallback<T> = (nextState: T, prevState: T) => boolean;
