@@ -1,0 +1,83 @@
+---
+layout: section
+id: "Usage"
+title: "Usage"
+prev:
+    id: ""
+    title: ""
+next:
+    id: ""
+    title: ""
+---
+
+<h2 id="usage">Usage</h2>
+<p>Moving the local state to the full-fledged shared state:</p>
+<pre><code class="language-diff">  import {createContext, useContext} from 'react';
++ import {Store, useStore} from 'groundstate';
++
++ let AppContext = createContext(new Store(0));
+
+  let Counter = () =&gt; {
+-     let [counter, setCounter] = useState(0);
++     let [counter, setCounter] = useStore(useContext(AppContext));
+
+      let handleClick = () =&gt; {
+          setCounter(value =&gt; value + 1);
+      };
+
+      return &lt;button onClick={handleClick}&gt;{counter}&lt;/button&gt;;
+  };
+
+  let ResetButton = () =&gt; {
+-     let [, setCounter] = useState(0);
++     let [, setCounter] = useStore(useContext(AppContext), false);
+
+      let handleClick = () =&gt; {
+          setCounter(0);
+      };
+
+      return &lt;button onClick={handleClick}&gt;×&lt;/button&gt;;
+  };
+
+  let App = () =&gt; &lt;&gt;&lt;Counter/&gt;{' '}&lt;ResetButton/&gt;&lt;/&gt;;
+</code></pre>
+<p><a href="https://codesandbox.io/p/sandbox/trcg3p?file=%2Fsrc%2FPlusButton.jsx" target="_blank">Live demo</a></p>
+<p>🔹 The Groundstate's shared state setup is very similar to <code>useState()</code> allowing for quick migration from local state to shared state or the other way around.</p>
+<p>🔹 The <code>false</code> parameter in <code>useStore(store, false)</code> (as in <code>&lt;ResetButton&gt;</code> above) tells the hook not to subscribe the component to tracking the store state updates. The common use case is when the component doesn't make use of the store state value, but it may use the state setter.</p>
+<p>🔹 An application can have as many stores as needed, whether on a single React Context or multiple Contexts.</p>
+<pre><code class="language-js">let AppContext = createContext({
+    users: new Store(/* ... */),
+    items: new Store(/* ... */),
+});
+</code></pre>
+<p>🔹 Apart from a boolean, <code>useStore(store, shouldUpdate)</code> can take a function of <code>(nextState, prevState) =&gt; boolean</code> as the second parameter to filter store updates to respond to:</p>
+<pre><code class="language-jsx">let ItemCard = ({id}) =&gt; {
+    let hasRelevantUpdates = useCallback((nextItems, prevItems) =&gt; {
+        return nextItems[id].revision !== prevItems[id].revision;
+    }, [id]);
+
+    let [items, setItems] = useStore(
+        useContext(AppContext).items,
+        hasRelevantUpdates,
+    );
+
+    return (
+        // content
+    );
+};
+</code></pre>
+<p>🔹 Shared state can be provided to the app by means of a regular React Context provider:</p>
+<pre><code class="language-diff">  let App = () =&gt; (
+-     &lt;AppContext.Provider value={42}&gt;
++     &lt;AppContext.Provider value={new Store(42)}&gt;
+          &lt;PlusButton/&gt;{' '}&lt;Display/&gt;
+      &lt;/AppContext.Provider&gt;
+  );
+</code></pre>
+<p>🔹 A store can contain data of any type.</p>
+<p>Live demos:<br>
+<a href="https://codesandbox.io/p/sandbox/trcg3p?file=%2Fsrc%2FPlusButton.jsx" target="_blank">Primitive value state</a><br>
+<a href="https://codesandbox.io/p/sandbox/m2hnnr?file=%2Fsrc%2FPlusButton.jsx" target="_blank">Object value state</a></p>
+<p>🔹 Immer can be used with <code>useStore()</code> just the same way as <a href="https://immerjs.github.io/immer/example-setstate#usestate--immer" target="_blank">with <code>useState()</code></a> to facilitate deeply nested data changes.</p>
+<p><a href="https://codesandbox.io/p/sandbox/flsh8h?file=%2Fsrc%2FPlusButton.jsx" target="_blank">Live demo with Immer</a></p>
+<p>🔹 A store initialized outside a component can be used as the component's remount-persistent state.</p>

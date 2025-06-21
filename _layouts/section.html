@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en" style="--color-scheme: mediumseagreen">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>{{page.title | strip_html}} | groundstate</title>
+<link rel="stylesheet" href="https://unpkg.com/ghstage@2.1/dist/css/base.css">
+<link rel="stylesheet" href="https://unpkg.com/ghstage@2.1/dist/css/section.css">
+<link rel="icon" type="image/svg+xml" href="{{site.github.baseurl}}/favicon.svg">
+{% unless page.next.id == '' %}<link rel="prefetch" href="{{site.github.baseurl}}/x/{{page.next.id}}">{% endunless %}
+{% unless page.prev.id == '' %}<link rel="prefetch" href="{{site.github.baseurl}}/x/{{page.prev.id}}">{% endunless %}
+</head>
+<body>
+<div class="layout">
+<div class="no-nav body">
+
+<main>
+{{content}}
+
+<p class="pagenav">
+    <span class="prev">
+        <span class="icon">←</span>
+        {% if page.prev.id == '' %}<a href="{{site.github.baseurl}}/">Intro</a>{% else %}<a href="{{site.github.baseurl}}/x/{{page.prev.id}}">{{page.prev.title}}</a>{% endif %}
+    </span>
+    <span class="sep">|</span>
+    {% if page.next.id == '' %}
+    <span class="repo next">
+        <a href="https://github.com/axtk/groundstate" target="_blank">GitHub</a>
+        <span class="icon">✦</span>
+    </span>
+    {% else %}
+    <span class="next">
+        <a href="{{site.github.baseurl}}/x/{{page.next.id}}">{{page.next.title}}</a>
+        <span class="icon">→</span>
+    </span>
+    {% endif %}
+</p>
+</main>
+</div>
+</div>
+
+{% if content contains '<pre><code ' %}<link rel="stylesheet" href="https://unpkg.com/@highlightjs/cdn-assets@11.11.1/styles/base16/material.min.css">
+<link rel="stylesheet" href="https://unpkg.com/ghstage@2.1/dist/css/code.css">
+<script src="https://unpkg.com/@highlightjs/cdn-assets@11.11.1/highlight.min.js"></script>
+<script>hljs.highlightAll()</script>{% elsif content contains '<pre ' %}<link rel="stylesheet" href="https://unpkg.com/ghstage@2.1/dist/css/code.lightbulb.css">
+{% endif %}
+<script>
+(function(m,e,t,r,i,k,a){m[i]=m[i]||function(){(m[i].a=m[i].a||[]).push(arguments)};
+m[i].l=1*new Date();
+for (var j = 0; j < document.scripts.length; j++) {if (document.scripts[j].src === r) { return; }}
+k=e.createElement(t),a=e.getElementsByTagName(t)[0],k.async=1,k.src=r,a.parentNode.insertBefore(k,a)})
+(window, document, "script", "https://mc.yandex.ru/metrika/tag.js", "ym");
+ym(101149630, "init", {clickmap: true, trackLinks: true, accurateTrackBounce: true});
+</script>
+<noscript><div><img src="https://mc.yandex.ru/watch/101149630" style="position:absolute;left:-9999px;" alt=""></div></noscript>
+</body>
+</html>
