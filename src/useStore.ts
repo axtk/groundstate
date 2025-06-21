@@ -38,18 +38,23 @@ export function useStore<T>(
     useEffect(() => {
         if (!shouldUpdate) return;
 
-        if (!initedRef.current) {
-            initedRef.current = true;
-            setRevision(Math.random());
-        }
-
-        return store.subscribe((nextState, prevState) => {
+        let unsubscribe = store.subscribe((nextState, prevState) => {
             if (
                 typeof shouldUpdate !== 'function' ||
                 shouldUpdate(nextState, prevState)
             )
                 setRevision(Math.random());
         });
+
+        if (!initedRef.current) {
+            initedRef.current = true;
+            setRevision(Math.random());
+        }
+
+        return () => {
+            unsubscribe();
+            initedRef.current = false;
+        };
     }, [store, shouldUpdate]);
 
     return [state, setState];
