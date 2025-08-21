@@ -1,5 +1,5 @@
 > [!WARNING]
-> It's [`@t8/react-store`](https://github.com/t8dash/react-store) now.
+> It's [`@t8/react-store`](https://github.com/t8js/react-store) now.
 
 ---
 
