@@ -20,7 +20,6 @@
     "type": "git",
     "url": "git+https://github.com/axtk/groundstate.git"
   },
-  "homepage": "https://groundstate.js.org",
   "keywords": [
     "react",
     "shared state",
